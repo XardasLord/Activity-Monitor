@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/ActivityMonitor/ActivityMonitor/bin/Debug
+/ActivityMonitor/ActivityMonitor/obj/Debug
