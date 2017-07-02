@@ -1,6 +1,7 @@
-﻿using ActivityMonitor.Resources;
+﻿using ActivityMonitor.Classes;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ActivityMonitor
 {
@@ -11,10 +12,12 @@ namespace ActivityMonitor
             var resourcesToMonitor = new List<IMonitorResource>();
 
             resourcesToMonitor.Add(FileMonitor.GetInstance());
+            resourcesToMonitor.Add(ProcessMonitor.GetInstance());
 
             foreach(var resource in resourcesToMonitor)
             {
-                resource.StartMonitor();
+                Thread thread = new Thread(new ThreadStart(resource.StartMonitor));
+                thread.Start();
             }
             
 

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ActivityMonitor.Resources
+namespace ActivityMonitor.Classes
 {
     public class FileMonitor : IMonitorResource
     {
@@ -54,12 +50,16 @@ namespace ActivityMonitor.Resources
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            Console.WriteLine($"File {e.ChangeType} {e.FullPath} at {DateTime.UtcNow}");
+            var message = $"File {e.ChangeType} {e.FullPath} at {DateTime.UtcNow}.";
+
+            QueueManager.GetInstance().AddMessage(message);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            Console.WriteLine($"File {e.OldFullPath} renamed to {e.FullPath} at {DateTime.UtcNow}");
+            var message = $"File {e.OldFullPath} renamed to {e.FullPath} at {DateTime.UtcNow}.";
+
+            QueueManager.GetInstance().AddMessage(message);
         }
     }
 }

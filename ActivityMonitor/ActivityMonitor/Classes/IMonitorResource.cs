@@ -1,4 +1,4 @@
-﻿namespace ActivityMonitor.Resources
+﻿namespace ActivityMonitor.Classes
 {
     public interface IMonitorResource
     {
