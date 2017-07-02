@@ -4,6 +4,6 @@ namespace ActivityMonitor.Classes
 {
     public interface IQueueService
     {
-        void AddMessage(string message);
+        void AddMessage(Message message);
     }
 }

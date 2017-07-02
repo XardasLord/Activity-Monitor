@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management;
+using System.Messaging;
 
 namespace ActivityMonitor.Classes
 {
@@ -42,7 +43,7 @@ namespace ActivityMonitor.Classes
             }
             catch (Exception e)
             {
-                QueueManager.GetInstance().AddMessage($"Occured an error while starting to Process Monitor. Error message: {e.Message}.");
+                //QueueManager.GetInstance().AddMessage($"Occured an error while starting to Process Monitor. Error message: {e.Message}.");
             }
 
         }
@@ -58,14 +59,22 @@ namespace ActivityMonitor.Classes
 
         private void startWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            var message = $"Process {e.NewEvent.Properties["ProcessName"].Value} started at {DateTime.UtcNow}.";
+            var activity = new Activity(e.NewEvent.Properties["ProcessName"].Value.ToString(), 
+                Activity.ActivityObject.Process, 
+                Activity.ActivityType.Started);
+
+            var message = new Message(activity);
 
             QueueManager.GetInstance().AddMessage(message);
         }
 
         private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            var message = $"Process {e.NewEvent.Properties["ProcessName"].Value} stopped at {DateTime.UtcNow}.";
+            var activity = new Activity(e.NewEvent.Properties["ProcessName"].Value.ToString(),
+                Activity.ActivityObject.Process,
+                Activity.ActivityType.Stopped);
+
+            var message = new Message(activity);
 
             QueueManager.GetInstance().AddMessage(message);
         }

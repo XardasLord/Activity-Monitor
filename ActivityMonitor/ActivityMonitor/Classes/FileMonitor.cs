@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Messaging;
 
 namespace ActivityMonitor.Classes
 {
@@ -50,14 +51,37 @@ namespace ActivityMonitor.Classes
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            var message = $"File {e.ChangeType} {e.FullPath} at {DateTime.UtcNow}.";
+            var type = Activity.ActivityType.Changed;
+
+            switch(e.ChangeType)
+            {
+                case WatcherChangeTypes.Changed:
+                    type = Activity.ActivityType.Changed;
+                    break;
+                case WatcherChangeTypes.Created:
+                    type = Activity.ActivityType.Created;
+                    break;
+                case WatcherChangeTypes.Deleted:
+                    type = Activity.ActivityType.Deleted;
+                    break;
+            }
+
+            var activity = new Activity(e.FullPath,
+                Activity.ActivityObject.File,
+                type);
+
+            var message = new Message(activity);
 
             QueueManager.GetInstance().AddMessage(message);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            var message = $"File {e.OldFullPath} renamed to {e.FullPath} at {DateTime.UtcNow}.";
+            var activity = new Activity(e.FullPath,
+                Activity.ActivityObject.File,
+                Activity.ActivityType.Renamed);
+
+            var message = new Message(activity);
 
             QueueManager.GetInstance().AddMessage(message);
         }
