@@ -64,7 +64,12 @@ namespace ActivityMonitor.Classes
             }
             catch(Exception e)
             {
-                _msmq.Send($"Noticed an error: {e.Message}");
+                var activity = new Activity($"Occured an Error - {e.Message} -",
+                Activity.ActivityObject.Error,
+                Activity.ActivityType.Error);
+
+                var msg = new Message(activity);
+                _msmq.Send(msg);
             }
             
         }

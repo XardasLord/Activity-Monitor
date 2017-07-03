@@ -1,36 +1,22 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Messaging;
 
 namespace ActivityMonitor.Classes
 {
     public class FileMonitor : IMonitorResource
     {
-        private static FileMonitor _instance;
-        private static readonly object _sync = new object();
+        public string Path { get; private set; }
         private static FileSystemWatcher _watcher;
 
-        private FileMonitor()
+        public FileMonitor(string pathToMonitor)
         {
-        }
-
-        public static FileMonitor GetInstance()
-        {
-            if(_instance == null)
-            {
-                lock (_sync)
-                {
-                    _instance = new FileMonitor();
-                }
-            }
-
-            return _instance;
+            Path = pathToMonitor;
         }
 
         public void StartMonitor()
         {
             _watcher = new FileSystemWatcher();
-            _watcher.Path = Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
+            _watcher.Path = Path;
 
             _watcher.NotifyFilter = NotifyFilters.LastWrite |
                                    NotifyFilters.FileName;
@@ -71,8 +57,7 @@ namespace ActivityMonitor.Classes
                 type);
 
             var message = new Message(activity);
-
-            QueueManager.GetInstance().AddMessage(message);
+            AddMessage(message);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
@@ -82,7 +67,11 @@ namespace ActivityMonitor.Classes
                 Activity.ActivityType.Renamed);
 
             var message = new Message(activity);
+            AddMessage(message);
+        }
 
+        private void AddMessage(Message message)
+        {
             QueueManager.GetInstance().AddMessage(message);
         }
     }

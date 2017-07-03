@@ -12,6 +12,7 @@ namespace ActivityMonitor.Classes
 
         public enum ActivityObject
         {
+            Error,
             File,
             Directory,
             Process
@@ -19,6 +20,8 @@ namespace ActivityMonitor.Classes
 
         public enum ActivityType
         {
+            Error,
+
             // File, Directory
             Changed,
             Created,
