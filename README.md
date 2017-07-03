@@ -8,3 +8,6 @@ This is a program tool that is working in the background of a Windows Operation 
 ### Used technologies:
 - C#
 - MSMQ (Message Queuing System)
+
+### Application schema:
+![alt text](https://github.com/XardasLord/Activity-Monitor/blob/master/ActivityMonitor/ActivityMonitor/Resources/Activity%20Monitor%20Schema.png)
