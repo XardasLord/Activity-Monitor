@@ -35,7 +35,7 @@ namespace ActivityMonitor
 
             foreach(var resource in resourcesToMonitor)
             {
-                Thread thread = new Thread(new ThreadStart(resource.StartMonitor));
+                Thread thread = new Thread(new ThreadStart(resource.StartMonitoring));
                 thread.Start();
             }
 

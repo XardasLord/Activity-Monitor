@@ -6,14 +6,14 @@ namespace ActivityMonitor.Classes
     public class FileMonitor : IMonitorResource
     {
         public string Path { get; private set; }
-        private static FileSystemWatcher _watcher;
+        private FileSystemWatcher _watcher;
 
         public FileMonitor(string pathToMonitor)
         {
             Path = pathToMonitor;
         }
 
-        public void StartMonitor()
+        public void StartMonitoring()
         {
             _watcher = new FileSystemWatcher();
             _watcher.Path = Path;
@@ -30,7 +30,7 @@ namespace ActivityMonitor.Classes
             _watcher.Renamed += new RenamedEventHandler(OnRenamed);
         }
 
-        public void StopMonitor()
+        public void StopMonitoring()
         {
             _watcher.Dispose();
         }

@@ -2,7 +2,7 @@
 {
     public interface IMonitorResource
     {
-        void StartMonitor();
-        void StopMonitor();
+        void StartMonitoring();
+        void StopMonitoring();
     }
 }

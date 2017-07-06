@@ -29,7 +29,7 @@ namespace ActivityMonitor.Classes
             return _instance;
         }
 
-        public void StartMonitor()
+        public void StartMonitoring()
         {
             try
             {
@@ -41,9 +41,9 @@ namespace ActivityMonitor.Classes
                 _stopWatch.EventArrived += new EventArrivedEventHandler(stopWatch_EventArrived);
                 _stopWatch.Start();
             }
-            catch (Exception e)
+            catch(UnauthorizedAccessException e)
             {
-                var activity = new Activity($"Occured an Error - {e.Message} -",
+                var activity = new Activity($"Error catched by UnauthorizedAccessException. Message: - {e.Message} -",
                 Activity.ActivityObject.Error,
                 Activity.ActivityType.Error);
 
@@ -51,10 +51,29 @@ namespace ActivityMonitor.Classes
 
                 AddMessage(message);
             }
+            catch(ManagementException e)
+            {
+                var activity = new Activity($"Error catched by ManagementException. Message: - {e.Message} -",
+                Activity.ActivityObject.Error,
+                Activity.ActivityType.Error);
 
+                var message = new Message(activity);
+
+                AddMessage(message);
+            }
+            catch(Exception e)
+            {
+                var activity = new Activity($"Error catched by Exception. Message: - {e.Message} -",
+                Activity.ActivityObject.Error,
+                Activity.ActivityType.Error);
+
+                var message = new Message(activity);
+
+                AddMessage(message);
+            }
         }
 
-        public void StopMonitor()
+        public void StopMonitoring()
         {
             _startWatch.Stop();
             _stopWatch.Stop();

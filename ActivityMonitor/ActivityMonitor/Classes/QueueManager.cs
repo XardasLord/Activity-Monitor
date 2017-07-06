@@ -48,7 +48,6 @@ namespace ActivityMonitor.Classes
 
             _msmq = new MessageQueue(Constants.Queue.QUEUE_PATH);
             _msmq.Formatter = new XmlMessageFormatter(new Type[] { typeof(Activity) });
-            _msmq.Label = "Activity";
         }
 
         public void AddMessage(Message message)
@@ -62,9 +61,18 @@ namespace ActivityMonitor.Classes
             {
                 _msmq.Send(message);
             }
-            catch(Exception e)
+            catch (MessageQueueException e)
             {
-                var activity = new Activity($"Occured an Error - {e.Message} -",
+                var activity = new Activity($"Error catched by MessageQueueException. Message: {e.Message} -",
+                Activity.ActivityObject.Error,
+                Activity.ActivityType.Error);
+
+                var msg = new Message(activity);
+                _msmq.Send(msg);
+            }
+            catch (Exception e)
+            {
+                var activity = new Activity($"Error catched by Exception. Message: {e.Message} -",
                 Activity.ActivityObject.Error,
                 Activity.ActivityType.Error);
 
